@@ -9,14 +9,12 @@ public class MonsterData : ScriptableObject
     public string MonsterId;
     public string MonsterName;
 
-    [Header("Stats")]
-    public float MaxHp;
+    [Header("Common Stats")]
+    public float MaxHeart;
     public float MoveSpeed;
     public float AttackDamage;
     public float AttackRange;
     public float AttackSpeed;
-
-    [Header("Wild Stats")]
     public float DetectionRange;
 
     [Range(0f, 1f)]

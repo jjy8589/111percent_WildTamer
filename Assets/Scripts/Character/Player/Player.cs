@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     [Header("이동 설정")]
     public float moveSpeed = 5f;
@@ -38,5 +38,10 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(inputDirection);
 
         _isMoving = true;
+    }
+
+    protected override void Die()
+    {
+        Debug.Log("플레이어 죽음");
     }
 }

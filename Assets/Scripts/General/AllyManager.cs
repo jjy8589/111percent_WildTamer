@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AllyManager : Singleton<AllyManager>
+{
+    private const int MAX_ALLY_COUNT = 10;
+
+    [SerializeField] private List<Monster> _monsterAllyList = new(MAX_ALLY_COUNT);
+
+    protected override void Awake()
+    {
+        UpdateTarget();
+    }
+
+    public bool IsMaxAlly()
+    {
+        return MAX_ALLY_COUNT <= _monsterAllyList.Count;
+    }
+
+    public void AddMonsterAlly(Monster monster)
+    {
+        if (IsMaxAlly()) return;
+
+        _monsterAllyList.Add(monster);
+        UpdateTarget();
+    }
+
+    public void RemoveMonsterAlly(Monster monster)
+    {
+        _monsterAllyList.Remove(monster);
+        UpdateTarget();
+    }
+
+    private void UpdateTarget()
+    {
+        for(int i = 0; i < _monsterAllyList.Count; i++)
+        {
+            _monsterAllyList[i].Target = (i == 0) ? GameManager.Instance.GetPlayerTransform() : _monsterAllyList[i - 1].transform;
+        }
+    }
+
+    public bool IsEnemyNear()
+    {
+        return true;
+    }
+}
