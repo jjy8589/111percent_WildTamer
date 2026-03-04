@@ -9,12 +9,16 @@ public class Player : MonoBehaviour
 
     // 내부 변수
     private Vector3 inputDirection;
+    private bool _isMoving;
 
     [SerializeField] private DynamicJoystick _joyStick;
+
+    public bool IsMoving { get => _isMoving; set => _isMoving = value; }
 
     private void Awake()
     {
         _joyStick.OnDragJoystick += OnDirectionChanged;
+        _joyStick.OnEndDragJoystick += () => _isMoving = false;
     }
 
     /// 조이스틱 입력 처리
@@ -32,5 +36,7 @@ public class Player : MonoBehaviour
 
         transform.position = newPosition;
         transform.rotation = Quaternion.LookRotation(inputDirection);
+
+        _isMoving = true;
     }
 }

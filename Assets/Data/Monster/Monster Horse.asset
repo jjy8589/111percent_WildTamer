@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 331bbb7a897e828439281c6d64588d26, type: 3}
+  m_Name: Monster Horse
+  m_EditorClassIdentifier: 
+  MonsterId: M_003
+  MonsterName: Horse
+  MaxHp: 20
+  MoveSpeed: 1
+  AttackDamage: 2
+  AttackRange: 1.5
+  AttackSpeed: 1.5
+  DetectionRange: 5
+  TameChance: 0.3

@@ -2,13 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DynamicJoystick : MonoBehaviour, IDragHandler
+public class DynamicJoystick : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     [SerializeField] private RectTransform _joystickBackground;
     [SerializeField] private RectTransform _joystickHandle;
     private Vector2 _inputVector;
 
     public Action<Vector3> OnDragJoystick;
+    public Action OnEndDragJoystick;
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -33,5 +34,10 @@ public class DynamicJoystick : MonoBehaviour, IDragHandler
     {
         // 쿼터뷰 시점(45도 회전)에 맞게 입력 방향 변환
         return new Vector3(_inputVector.x, 0, _inputVector.y);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        OnEndDragJoystick?.Invoke();
     }
 }
