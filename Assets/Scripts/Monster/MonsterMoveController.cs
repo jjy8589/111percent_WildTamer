@@ -48,8 +48,7 @@ public class EnemyIdleState : IState
     public void Enter() { }
     public void Update()
     {
-        if (enemy.EnemyInRange()) enemy.ChangeState(new EnemyCombatState(enemy));
-        else enemy.movementPattern?.Move(enemy.transform, enemy.player);
+        enemy.movementPattern?.Move(enemy.transform, enemy.player);
     }
     public void Exit() { }
 }
@@ -62,12 +61,8 @@ public class EnemyCombatState : IState
     public void Enter() { }
     public void Update()
     {
-        if (!enemy.EnemyInRange()) enemy.ChangeState(new EnemyIdleState(enemy));
-        else
-        {
             // 공격 로직
             Debug.Log("Enemy attacking player!");
-        }
     }
     public void Exit() { }
 }
@@ -82,23 +77,10 @@ public class AllyFollowState : IState
     public void Update()
     {
         Debug.Log("follow");
-        if (!ally.PlayerIsMoving())
-        {
-            if (ally.EnemyInRange())
-            {
-                ally.ChangeState(new AllyCombatState(ally));
-            }
-            else
-            {
-                ally.ChangeState(new AllyIdleState(ally));
-            }
-        }
-        else
-        {
+
             // 플레이어 따라가기
             Vector3 dir = (ally.player.position - ally.transform.position).normalized;
             ally.transform.position += dir * Time.deltaTime;
-        }
     }
     public void Exit() { }
 }
@@ -113,14 +95,6 @@ public class AllyIdleState : IState
     public void Update()
     {
         Debug.Log("AllyIdleState");
-        if (ally.EnemyInRange())
-        {
-            ally.ChangeState(new AllyCombatState(ally));
-        }
-        else if (ally.PlayerIsMoving())
-        {
-            ally.ChangeState(new AllyFollowState(ally));
-        }
     }
     public void Exit() { }
 }
@@ -135,22 +109,6 @@ public class AllyCombatState : IState
     public void Update()
     {
         Debug.Log("AllyCombatState");
-        if (!ally.EnemyInRange())
-        {
-            if (ally.PlayerIsMoving())
-            {
-                ally.ChangeState(new AllyFollowState(ally));
-            }
-            else
-            {
-                ally.ChangeState(new AllyIdleState(ally));
-            }
-        }
-        else
-        {
-            // 공격 로직
-            Debug.Log("Ally attacking!");
-        }
     }
     public void Exit() { }
 }
@@ -183,27 +141,57 @@ public class MonsterMoveController : MonoBehaviour
         currentState.Enter();
     }
 
-    public bool EnemyInRange()
+    //public bool EnemyInRange()
+    //{
+    //    Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange);
+    //    foreach (var e in enemies)
+    //    {
+    //        if (isAlly && e.CompareTag("Enemy")) return true;
+    //        if (!isAlly && e.CompareTag("Player")) return true;
+    //    }
+    //    return false;
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
-        Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange);
-        foreach (var e in enemies)
+        if (isAlly)
         {
-            if (isAlly && e.CompareTag("Enemy")) return true;
-            if (!isAlly && e.CompareTag("Player")) return true;
+            // 아군이면 적군 감지
+            if (other.CompareTag("Enemy"))
+            {
+                Debug.Log("적군 감지 → Combat 상태 전환");
+                ChangeState(new AllyCombatState(this));
+            }
         }
-        return false;
+        else
+        {
+            // 적군이면 플레이어 감지
+            if (other.CompareTag("Player"))
+            {
+                Debug.Log("플레이어 감지 → Combat 상태 전환");
+                ChangeState(new EnemyCombatState(this));
+            }
+        }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (isAlly && other.CompareTag("Enemy"))
+        {
+            Debug.Log("적군 사라짐 → Idle/Follow 상태 전환");
+            ChangeState(new AllyIdleState(this));
+        }
+        if (!isAlly && other.CompareTag("Player"))
+        {
+            Debug.Log("플레이어 사라짐 → Patrol 상태 전환");
+            ChangeState(new EnemyIdleState(this));
+        }
+    }
+
 
     public bool PlayerIsMoving()
     {
         if (player == null) return false;
         return player.GetComponent<Player>().IsMoving;
     }
-
-    public bool PlayerTooFar(float maxDistance = 5f)
-    {
-        if (player == null) return false;
-        return Vector3.Distance(transform.position, player.position) > maxDistance;
-    }
-
 }
