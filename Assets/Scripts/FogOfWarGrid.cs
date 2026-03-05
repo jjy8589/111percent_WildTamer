@@ -3,77 +3,57 @@ using UnityEngine;
 public class FogOfWarGrid : MonoBehaviour
 {
     [Header("Fog Settings")]
-    public int textureWidth = 256;
-    public int textureHeight = 256;
-    public float worldWidth = 100f;   // 맵 실제 가로 크기
-    public float worldHeight = 100f;
-    public float revealRadius = 5f;    // 시야 반경(월드 단위)
+    private int _textureWidth = 256;
+    private int _textureHeight = 256;
 
     [Header("References")]
-    public Renderer fogRenderer;       // 맵 전체를 덮는 Plane의 Renderer
+    [SerializeField] private Renderer _fogRenderer;        // 맵 전체를 덮는 Plane의 Renderer
 
-    private Texture2D fogTexture;
-    private Color[] fogPixels;
-    private Transform player;
-
-    // 탐색 퍼센트 (가산점: 저장용)
-    public float ExploredPercent
-    {
-        get
-        {
-            int revealed = 0;
-            foreach (var c in fogPixels) if (c.a < 0.5f) revealed++;
-            return (float)revealed / fogPixels.Length * 100f;
-        }
-    }
+    private Texture2D _fogTexture;
+    private Color[] _fogPixels;
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
         InitFogTexture();
+        MapManager.Instance.OnCellVisited += RevealAroundPlayer;
     }
 
-    void InitFogTexture()
+    private void InitFogTexture()
     {
-        fogTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
-        fogPixels = new Color[textureWidth * textureHeight];
+        _fogTexture = new Texture2D(_textureWidth, _textureHeight, TextureFormat.RGBA32, false);
+        _fogPixels = new Color[_textureWidth * _textureHeight];
 
         // 전부 검정(미탐색)으로 초기화
-        for (int i = 0; i < fogPixels.Length; i++)
-            fogPixels[i] = new Color(0, 0, 0, 1f);
+        for (int i = 0; i < _fogPixels.Length; i++)
+            _fogPixels[i] = new Color(0, 0, 0, 1f);
 
-        fogTexture.SetPixels(fogPixels);
-        fogTexture.Apply();
-        fogRenderer.material.mainTexture = fogTexture;
+        _fogTexture.SetPixels(_fogPixels);
+        _fogTexture.Apply();
+        _fogRenderer.material.mainTexture = _fogTexture;
     }
 
-    void Update()
-    {
-        RevealAroundPlayer();
-    }
-
-    void RevealAroundPlayer()
+    void RevealAroundPlayer(Vector3 pos)
     {
         // 월드 좌표 → 텍스처 픽셀 좌표 변환
-        int px = WorldToPixelX(player.position.x);
-        int py = WorldToPixelY(player.position.z);
-        int pixelRadius = (int)(revealRadius / worldWidth * textureWidth);
+        int px = WorldToPixelX(pos.x);
+        int py = WorldToPixelY(pos.z);
+        int pixelRadius = (int)(MapConfig.FOG_REVEAL_RANGE / MapConfig.GRID_SIZE_X * _textureWidth);
 
         bool changed = false;
         for (int y = py - pixelRadius; y <= py + pixelRadius; y++)
         {
             for (int x = px - pixelRadius; x <= px + pixelRadius; x++)
             {
-                if (x < 0 || x >= textureWidth || y < 0 || y >= textureHeight) continue;
+                if (x < 0 || x >= _textureWidth || y < 0 || y >= _textureHeight) continue;
                 if ((x - px) * (x - px) + (y - py) * (y - py) > pixelRadius * pixelRadius) continue;
 
-                int idx = y * textureWidth + x;
-                if (fogPixels[idx].a > 0.01f)
+                int idx = y * _textureWidth + x;
+                if (_fogPixels[idx].a > 0.01f)
                 {
                     // 경계부 부드럽게: 거리에 따라 알파 감소
                     float dist = Mathf.Sqrt((x - px) * (x - px) + (y - py) * (y - py));
                     float alpha = Mathf.Lerp(0f, 0.4f, dist / pixelRadius); // 외곽은 옅은 안개
-                    fogPixels[idx] = new Color(0, 0, 0, alpha);
+                    _fogPixels[idx] = new Color(0, 0, 0, alpha);
                     changed = true;
                 }
             }
@@ -81,42 +61,23 @@ public class FogOfWarGrid : MonoBehaviour
 
         if (changed)
         {
-            fogTexture.SetPixels(fogPixels);
-            fogTexture.Apply();
+            _fogTexture.SetPixels(_fogPixels);
+            _fogTexture.Apply();
         }
     }
 
     int WorldToPixelX(float wx)
     {
-        float u = (wx + worldWidth * 0.5f) / worldWidth;
+        float u = (wx + MapConfig.GRID_SIZE_X * 0.5f) / MapConfig.GRID_SIZE_X;
         u = 1f - u;
-        return Mathf.RoundToInt(u * textureWidth);
+        return Mathf.RoundToInt(u * _textureWidth);
     }
 
     int WorldToPixelY(float wz)
     {
-        float v = (wz + worldHeight * 0.5f) / worldHeight;
-
-        // Z축 반전 필요할 경우
+        float v = (wz + MapConfig.GRID_SIZE_Z * 0.5f) / MapConfig.GRID_SIZE_Z;
         v = 1f - v;
 
-        return Mathf.RoundToInt(v * textureHeight);
-    }
-
-
-    // 저장용: 픽셀 배열 직렬화
-    public float[] SerializeFog()
-    {
-        float[] data = new float[fogPixels.Length];
-        for (int i = 0; i < fogPixels.Length; i++) data[i] = fogPixels[i].a;
-        return data;
-    }
-
-    public void DeserializeFog(float[] data)
-    {
-        for (int i = 0; i < Mathf.Min(data.Length, fogPixels.Length); i++)
-            fogPixels[i] = new Color(0, 0, 0, data[i]);
-        fogTexture.SetPixels(fogPixels);
-        fogTexture.Apply();
+        return Mathf.RoundToInt(v * _textureHeight);
     }
 }

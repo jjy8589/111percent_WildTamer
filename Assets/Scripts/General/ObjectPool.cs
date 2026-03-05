@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class ObjectPool : Singleton<ObjectPool>
+public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
 {
     [Header("Objects Prefabs")]
     [SerializeField] private GameObject _monsterPrefab;
@@ -15,15 +15,12 @@ public class ObjectPool : Singleton<ObjectPool>
     protected override void Awake()
     {
         base.Awake();
-
-        Initialized();
     }
 
-    private void Initialized()
+    public void Initialize()
     {
         for (int i = 0; i < _monsterSpawn; i++)
             _monsterQueue.Enqueue(CreateNewMonster());
-
     }
 
     private Monster CreateNewMonster()
