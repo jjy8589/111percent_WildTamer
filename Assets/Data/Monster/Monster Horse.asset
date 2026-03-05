@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterId: M_003
   MonsterName: Horse
-  MaxHp: 20
+  MaxHeart: 20
   MoveSpeed: 1
   AttackDamage: 2
   AttackRange: 1.5

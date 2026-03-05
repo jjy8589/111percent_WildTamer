@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterId: M_001
   MonsterName: Dog
-  MaxHp: 10
+  MaxHeart: 10
   MoveSpeed: 1
   AttackDamage: 1
   AttackRange: 1

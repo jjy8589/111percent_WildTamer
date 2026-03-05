@@ -41,14 +41,12 @@ public class ObjectPool : Singleton<ObjectPool>
         {
             var obj = _monsterQueue.Dequeue();
             obj.transform.SetParent(null);
-            obj.gameObject.SetActive(true);
             return obj;
         }
         else
         {
             var newObj = CreateNewMonster();
             newObj.transform.SetParent(null);
-            newObj.gameObject.SetActive(true);
             return newObj;
         }
     }

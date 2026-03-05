@@ -14,6 +14,8 @@ public abstract class Character : MonoBehaviour
     protected LayerMask _allyMask;    // 아군의 layer
     protected LayerMask _enemyMask;   // 적군의 layer
 
+    protected float _lastAttackTime;
+
     public void Damaged(float amount)
     {
         if (_currentHeart <= 0) return;
@@ -52,11 +54,14 @@ public abstract class Character : MonoBehaviour
         return target;
     }
 
+    public bool CanAttack() => Time.time >= _lastAttackTime + _attackSpeed;
 
     public void Attack(Character target)
     {
+        if (!CanAttack()) return;
         if (target == null) return;
 
+        _lastAttackTime = Time.time;
         target.Damaged(_attackDamage);
     }
 }

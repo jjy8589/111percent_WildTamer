@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterId: M_002
   MonsterName: Turtle
-  MaxHp: 30
+  MaxHeart: 30
   MoveSpeed: 1
   AttackDamage: 5
   AttackRange: 1

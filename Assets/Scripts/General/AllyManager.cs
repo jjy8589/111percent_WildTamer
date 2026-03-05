@@ -8,7 +8,7 @@ public class AllyManager : Singleton<AllyManager>
 
     [SerializeField] private List<Monster> _monsterAllyList = new(MAX_ALLY_COUNT);
 
-    protected override void Awake()
+    private void Start()
     {
         UpdateTarget();
     }

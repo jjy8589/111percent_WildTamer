@@ -29,6 +29,7 @@ public class Monster : Character
     private void Awake()
     {
         _askTamerButton.onClick.AddListener(SuccessTamer);
+        _moveController = GetComponent<MonsterMoveController>();
     }
 
     public void SetMonsterData(MonsterData monsterData)
