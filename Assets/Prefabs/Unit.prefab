@@ -414,7 +414,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6265378188325609691
 GameObject:
@@ -530,6 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebd1f92cd30f634a9394d45f1324c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _detectTrigger: {fileID: 0}
   _askTamerObject: {fileID: 6265378187550454221}
   _askTamerButton: {fileID: 6265378187745694160}
   _triggerRange: {fileID: 6265378187828019502}

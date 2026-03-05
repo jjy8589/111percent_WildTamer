@@ -65,9 +65,14 @@ public class AllyIdleState : IMonsterState
     {
         Debug.Log("AllyIdleState");
 
-        if (AllyManager.Instance.IsEnemyNear())
+        if (AllyManager.Instance.IsEnemyNear)
         {
             _moveController.ChangeState(new AllyAttackState(_monster, _moveController));
+        }
+
+        if (GameManager.Instance.IsPlayerMoving())
+        {
+            _moveController.ChangeState(new AllyMoveState(_monster, _moveController));
         }
     }
     public void Exit() { }
@@ -92,6 +97,16 @@ public class AllyMoveState : IMonsterState
 
         Vector3 desiredPos = _monster.Target.position - _monster.Target.right * 1.5f;
         _monster.transform.position = Vector3.Lerp(_monster.transform.position, desiredPos, Time.deltaTime);
+
+        if (AllyManager.Instance.IsEnemyNear)
+        {
+            _moveController.ChangeState(new AllyAttackState(_monster, _moveController));
+        }
+
+        if (!GameManager.Instance.IsPlayerMoving())
+        {
+            _moveController.ChangeState(new AllyIdleState(_monster, _moveController));
+        }
     }
     public void Exit() { }
 }
@@ -113,7 +128,7 @@ public class AllyAttackState : IMonsterState
     {
         Debug.Log("AllyAttackState");
 
-        if (!AllyManager.Instance.IsEnemyNear())
+        if (!AllyManager.Instance.IsEnemyNear)
         {
             _moveController.ChangeState(new AllyIdleState(_monster, _moveController));
         }

@@ -26,8 +26,10 @@ public class Monster : Character
 
     public Transform Target { get => _target; set => _target = value; }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _askTamerButton.onClick.AddListener(SuccessTamer);
         _moveController = GetComponent<MonsterMoveController>();
     }
@@ -42,6 +44,7 @@ public class Monster : Character
     private void InitializeMonsterStat()
     {
         _maxHeart = _monsterData.MaxHeart;
+        _currentHeart = _monsterData.MaxHeart;
         _moveSpeed = _monsterData.MoveSpeed;
         _attackDamage = _monsterData.AttackDamage;
         _attackRange = _monsterData.AttackRange;
@@ -66,7 +69,7 @@ public class Monster : Character
         SetLayerAndMask();
     }
 
-    private void SetLayerAndMask()
+    protected override void SetLayerAndMask()
     {
         switch (_monsterTeam)
         {
@@ -93,6 +96,7 @@ public class Monster : Character
         {
             AllyManager.Instance.RemoveMonsterAlly(this);
             ObjectPool.Instance.ReturnObject(this);
+            gameObject.SetActive(false);
         }
     }
 
@@ -129,7 +133,7 @@ public class Monster : Character
 
     public void EngageEnemy()
     {
-        Character enemy = FindClosestEnemy(_detectionRange);
+        Character enemy = FindClosestEnemy();
 
         if (enemy == null) return;
 
@@ -137,7 +141,6 @@ public class Monster : Character
         dir.y = 0f;
 
         float dist = dir.magnitude;
-
 
         if (dist > _attackRange)
         {

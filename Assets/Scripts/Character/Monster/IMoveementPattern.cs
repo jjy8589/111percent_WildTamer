@@ -7,7 +7,7 @@ public interface IMovementPattern
     void Move(Transform self);
 }
 
-public class StraightMovement : IMovementPattern
+public class RandomMovement : IMovementPattern
 {
     public void Move(Transform self)
     {

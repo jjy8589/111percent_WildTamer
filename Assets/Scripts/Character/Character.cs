@@ -16,6 +16,16 @@ public abstract class Character : MonoBehaviour
 
     protected float _lastAttackTime;
 
+    protected const float DETECT_RANGE = 5f;
+    [SerializeField] protected Collider _detectTrigger;
+
+    protected virtual void Awake()
+    {
+        SetLayerAndMask();
+    }
+
+    protected abstract void SetLayerAndMask();
+
     public void Damaged(float amount)
     {
         if (_currentHeart <= 0) return;
@@ -30,9 +40,9 @@ public abstract class Character : MonoBehaviour
 
     protected abstract void Die();
 
-    public Character FindClosestEnemy(float range)
+    public Character FindClosestEnemy()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, range, _enemyMask);
+        Collider[] hits = Physics.OverlapSphere(transform.position, DETECT_RANGE, _enemyMask);
         if (hits.Length == 0) return null;
 
         float minDist = float.MaxValue;

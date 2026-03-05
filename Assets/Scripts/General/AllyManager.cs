@@ -8,6 +8,8 @@ public class AllyManager : Singleton<AllyManager>
 
     [SerializeField] private List<Monster> _monsterAllyList = new(MAX_ALLY_COUNT);
 
+    public bool IsEnemyNear = false;
+
     private void Start()
     {
         UpdateTarget();
@@ -38,10 +40,5 @@ public class AllyManager : Singleton<AllyManager>
         {
             _monsterAllyList[i].Target = (i == 0) ? GameManager.Instance.GetPlayerTransform() : _monsterAllyList[i - 1].transform;
         }
-    }
-
-    public bool IsEnemyNear()
-    {
-        return true;
     }
 }
