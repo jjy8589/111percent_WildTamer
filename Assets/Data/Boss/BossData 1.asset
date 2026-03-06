@@ -22,6 +22,6 @@ MonoBehaviour:
   DetectionRange: 3
   MovePattern: 0
   TameChance: 0
-  PatternDelayTime: 2
+  PatternDelayTime: 3
   BossPatternSOList:
   - {fileID: 11400000, guid: f13a4d113362bf541aa931cd7b7c9c67, type: 2}

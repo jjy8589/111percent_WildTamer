@@ -39,7 +39,7 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
     
     private CircleAttackArea CreateCircleAttackArea()
     {
-        var newObj = Instantiate(_monsterPrefab).GetComponent<CircleAttackArea>();
+        var newObj = Instantiate(_circleAttackAreaPrefab).GetComponent<CircleAttackArea>();
         newObj.gameObject.SetActive(false);
         newObj.transform.SetParent(transform);
         return newObj;

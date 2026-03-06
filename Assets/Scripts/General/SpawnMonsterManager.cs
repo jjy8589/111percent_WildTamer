@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class BossMonsterSpawner
 {
-    public Transform SpawnTransform;
+    public Vector3 SpawnPosition;
     public MonsterData BossData;
 }
 
@@ -17,34 +17,43 @@ public class SpawnMonsterManager : Singleton<SpawnMonsterManager>
 
     private void Start()
     {
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 0; i++)
         {
-            int index = UnityEngine.Random.Range(0, _monsterDatas.Count - 1);
-            SpawnMonsters(MapManager.Instance.GetRandomPosition(), _monsterDatas[index]);
+            int index = UnityEngine.Random.Range(0, _monsterDatas.Count);
+            SpawnMonster(MapManager.Instance.GetRandomPosition(), _monsterDatas[index]);
         }
 
         for(int i = 0; i < _bossMonsterSpawner.Count; i++)
         {
-            SpawnMonsters(_bossMonsterSpawner[i].SpawnTransform.position, _bossMonsterSpawner[i].BossData);
+            SpawnBoss(_bossMonsterSpawner[i].SpawnPosition, _bossMonsterSpawner[i].BossData);
         }
     }
 
-    public void SpawnMonsters(Vector3 pos, MonsterData monsterData)
+    public void SpawnMonster(Vector3 pos, MonsterData monsterData)
     {
         Monster monster = ObjectPool.Instance.GetEnemyObject();
         monster.transform.position = pos + Vector3.up;
         monster.gameObject.SetActive(true);
         monster.SetMonsterData(monsterData);
-        monster.SetMonsterTeam(MonsterTeam.Enemy);
+        monster.SetMonsterTeam(MonsterType.Enemy);
+    }
+    
+    public void SpawnBoss(Vector3 pos, MonsterData monsterData)
+    {
+        Monster monster = ObjectPool.Instance.GetEnemyObject();
+        monster.transform.position = pos + Vector3.up;
+        monster.gameObject.SetActive(true);
+        monster.SetMonsterData(monsterData);
+        monster.SetMonsterTeam(MonsterType.Boss);
     }
 
-    private void SpawnAllys(Vector3 pos, MonsterData monsterData)
+    private void SpawnAlly(Vector3 pos, MonsterData monsterData)
     {
         Monster monster = ObjectPool.Instance.GetEnemyObject();
         monster.transform.position = pos + Vector3.up;
         monster.gameObject.SetActive(true);
         monster.SetMonsterData(monsterData);
-        monster.SetMonsterTeam(MonsterTeam.Ally);
+        monster.SetMonsterTeam(MonsterType.Ally);
 
         AllyManager.Instance.AddMonsterAlly(monster);
     }

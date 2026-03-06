@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum MonsterTeam
-{
-    Ally,
-    Enemy,
-    Boss,
-}
+
 
 public class Monster : Character
 {
@@ -19,7 +14,7 @@ public class Monster : Character
     [SerializeField] private MonsterData _monsterData;
     private float _detectionRange;
 
-    private MonsterTeam _monsterTeam;
+    private MonsterType _monsterTeam;
     private IMonsterBehavior _monsterBehavior;
     private MonsterMoveController _moveController;
 
@@ -61,23 +56,23 @@ public class Monster : Character
         _detectionRange = _monsterData.DetectionRange;
     }
 
-    public void SetMonsterTeam(MonsterTeam team)
+    public void SetMonsterTeam(MonsterType team)
     {
         _monsterTeam = team;
 
         switch (team)
         {
-            case MonsterTeam.Ally:
+            case MonsterType.Ally:
                 _monsterBehavior = new AllyMonsterBehavior(this);
                 _sliderFillColor.color = Color.green;
                 break;
 
-            case MonsterTeam.Enemy:
+            case MonsterType.Enemy:
                 _monsterBehavior = new EnemyMonsterBehavior(this, _monsterData.MovePattern);
                 _sliderFillColor.color = Color.red;
                 break;
 
-            case MonsterTeam.Boss:
+            case MonsterType.Boss:
                 BossData boss = _monsterData as BossData;
 
                 List<IBossPattern> bossPattern = new();
@@ -98,12 +93,17 @@ public class Monster : Character
     {
         switch (_monsterTeam)
         {
-            case MonsterTeam.Ally:
+            case MonsterType.Ally:
                 gameObject.layer = LayerMask.NameToLayer("Ally");
                 _allyMask = LayerMask.GetMask("Ally");
                 _enemyMask = LayerMask.GetMask("Enemy");
                 break;
-            case MonsterTeam.Enemy:
+            case MonsterType.Enemy:
+                gameObject.layer = LayerMask.NameToLayer("Enemy");
+                _allyMask = LayerMask.GetMask("Enemy");
+                _enemyMask = LayerMask.GetMask("Ally");
+                break;
+            case MonsterType.Boss:
                 gameObject.layer = LayerMask.NameToLayer("Enemy");
                 _allyMask = LayerMask.GetMask("Enemy");
                 _enemyMask = LayerMask.GetMask("Ally");
@@ -113,7 +113,7 @@ public class Monster : Character
 
     protected override void Die()
     {
-        if (_monsterTeam.Equals(MonsterTeam.Enemy) && !AllyManager.Instance.IsMaxAlly() && IsAskTamer())
+        if (_monsterTeam.Equals(MonsterType.Enemy) && !AllyManager.Instance.IsMaxAlly() && IsAskTamer())
         {
             _askTamerObject.SetActive(true);
         }
@@ -141,7 +141,7 @@ public class Monster : Character
 
     public void SuccessTamer()
     {
-        SetMonsterTeam(MonsterTeam.Ally);
+        SetMonsterTeam(MonsterType.Ally);
         _askTamerObject.SetActive(false);
 
         _currentHeart = _maxHeart;

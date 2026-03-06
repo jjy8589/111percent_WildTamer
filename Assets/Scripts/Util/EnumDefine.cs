@@ -5,3 +5,10 @@ public enum EnemyMovePattern
     AccelDecel,
     Circular,
 }
+
+public enum MonsterType
+{
+    Ally,
+    Enemy,
+    Boss,
+}

@@ -14,36 +14,40 @@ public interface IBossPattern
 public class AreaAttackPattern : IBossPattern
 {
     private Monster _monster;
-    private GameObject _areaPrefab;
     private float _radius;
     private float _duration;
     private int _damage;
 
-    public AreaAttackPattern(Monster monster, GameObject areaPrefab, float radius, float duration, int damage)
+    private float _timer;
+
+    public AreaAttackPattern(Monster monster, float radius, float duration, int damage)
     {
         _monster = monster;
-        _areaPrefab = areaPrefab;
         _radius = radius;
         _duration = duration;
         _damage = damage;
     }
 
-    public bool IsFinished => throw new System.NotImplementedException();
+    public bool IsFinished => _timer >= _duration;
 
     public void Enter()
     {
-    }
+        _timer = 0;
 
-    public void Exit()
-    {
-    }
-
-    public void Update()
-    {
         var attackArea = ObjectPool.Instance.GetCircleAttackAreaObject();
         attackArea.Initialize(_radius, _duration, _damage, _monster.EnemyMask);
         attackArea.transform.position = _monster.transform.position;
         attackArea.gameObject.SetActive(true);
+    }
+
+    public void Exit()
+    {
+        _timer = 0;
+    }
+
+    public void Update()
+    {
+        _timer += Time.deltaTime;
     }
 }
 
@@ -55,6 +59,8 @@ public class SummonPattern : IBossPattern
     private int _maxSummonCount;
     private float _summonRadius;
 
+    private bool _isFinished;
+
     public SummonPattern(Monster monster, List<MonsterData> summonMonsterList, int minSummonCount, int maxSummonCount, float summonRadius)
     {
         _monster = monster;
@@ -64,23 +70,29 @@ public class SummonPattern : IBossPattern
         _summonRadius = summonRadius;
     }
 
-    public bool IsFinished => throw new System.NotImplementedException();
+    public bool IsFinished => _isFinished;
 
     public void Enter()
     {
+        _isFinished = false;
+
+        int summonCount = ChooseSpawnCount();
+        for (int i = 0; i < summonCount; i++)
+        {
+            SpawnMonsterManager.Instance.SpawnMonster(ChooseSpawnPosition(), ChooseSummonMonster());
+        }
+
+        _isFinished = true;
     }
 
     public void Exit()
     {
+        _isFinished = false;
     }
 
     public void Update()
     {
-        int summonCount = ChooseSpawnCount();
-        for(int i =0; i< summonCount; i++)
-        {
-            SpawnMonsterManager.Instance.SpawnMonsters(ChooseSpawnPosition(), ChooseSummonMonster());
-        }
+        
     }
 
     private int ChooseSpawnCount()

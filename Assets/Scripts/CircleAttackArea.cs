@@ -49,6 +49,7 @@ public class CircleAttackArea : MonoBehaviour
                 }
 
                 ObjectPool.Instance.ReturnObject(this);
+                gameObject.SetActive(false);
             }
 
             yield return null;

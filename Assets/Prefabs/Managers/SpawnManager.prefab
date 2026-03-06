@@ -48,3 +48,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6f1cf664428a19748902d90dcb36eb9e, type: 2}
   - {fileID: 11400000, guid: f598766161c75a84b8614f80013afb32, type: 2}
   - {fileID: 11400000, guid: e1b2b2784fedf7e459ebaa99fe7d026f, type: 2}
+  _bossMonsterSpawner:
+  - SpawnPosition: {x: 25, y: 1, z: 25}
+    BossData: {fileID: 11400000, guid: b201f4458fe3ff442bf6c96ada90b3c7, type: 2}
+  - SpawnPosition: {x: -25, y: 1, z: -25}
+    BossData: {fileID: 11400000, guid: f66be37c427c58f4fbaf83785b069d19, type: 2}

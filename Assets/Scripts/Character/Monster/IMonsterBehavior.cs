@@ -116,15 +116,11 @@ public class BossMonsterBehavior : IMonsterBehavior
     private float _delayTime;
     private IBossPattern _currentPattern;
 
-    private bool _isStartPattern;
-
     public BossMonsterBehavior(Monster monster, List<IBossPattern> patternList, float patternDelayTime)
     {
         _monster = monster;
         _patternList = patternList;
-        _patternTimer = patternDelayTime;
-
-        _isStartPattern = false;
+        _delayTime = patternDelayTime;
     }
 
     public void Enter() 
@@ -141,25 +137,27 @@ public class BossMonsterBehavior : IMonsterBehavior
             return;
         }
 
-        // 공격 대상이 있으면 패턴 선택 후 수행
-        if (!_isStartPattern)
+        // 패턴 선택
+        if (_currentPattern == null)
         {
             _currentPattern = ChoosePattern();
-            _currentPattern.Update();
-            _isStartPattern = true;
+            _currentPattern.Enter();
         }
 
-        // 패턴이 종료됐다면 delay
-        if (_currentPattern != null && _currentPattern.IsFinished)
+        // 패턴 실행 중
+        if (!_currentPattern.IsFinished)
         {
-            _patternTimer += Time.deltaTime;
+            _currentPattern.Update();
+            return;
+        }
 
-            // 정해진 대기 시간 지나면 
-            if(_patternTimer > _delayTime)
-            {
-                _isStartPattern = false;
-                _patternTimer = 0;
-            }
+        // 패턴 종료
+        _patternTimer += Time.deltaTime;
+        if (_patternTimer >= _delayTime)
+        {
+            _currentPattern.Exit();
+            _currentPattern = null;   // null로 초기화해서 다음 루프에서 새 패턴 선택
+            _patternTimer = 0;
         }
     }
 
