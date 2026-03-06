@@ -7,13 +7,14 @@ public enum MonsterTeam
 {
     Ally,
     Enemy,
+    Boss,
 }
 
 public class Monster : Character
 {
     [SerializeField] private GameObject _askTamerObject;
     [SerializeField] private Button _askTamerButton;
-    [SerializeField] private Collider _triggerRange;
+
 
     [SerializeField] private MonsterData _monsterData;
     private float _detectionRange;
@@ -34,11 +35,19 @@ public class Monster : Character
         _moveController = GetComponent<MonsterMoveController>();
     }
 
+    private void LateUpdate()
+    {
+        _monsterBehavior?.Update();
+    }
+
     public void SetMonsterData(MonsterData monsterData)
     {
         _monsterData = monsterData;
         
         InitializeMonsterStat();
+
+        _heartSlider.maxValue = _maxHeart;
+        _heartSlider.value = _currentHeart;
     }
 
     private void InitializeMonsterStat()
@@ -59,10 +68,26 @@ public class Monster : Character
         switch (team)
         {
             case MonsterTeam.Ally:
-                _monsterBehavior = new AllyMonsterBehavior(this, _moveController);
+                _monsterBehavior = new AllyMonsterBehavior(this);
+                _sliderFillColor.color = Color.green;
                 break;
+
             case MonsterTeam.Enemy:
-                _monsterBehavior = new EnemyMonsterBehavior(this, _moveController);
+                _monsterBehavior = new EnemyMonsterBehavior(this, _monsterData.MovePattern);
+                _sliderFillColor.color = Color.red;
+                break;
+
+            case MonsterTeam.Boss:
+                BossData boss = _monsterData as BossData;
+
+                List<IBossPattern> bossPattern = new();
+                foreach(var pattern in boss.BossPatternSOList)
+                {
+                    bossPattern.Add(pattern.CreatePattern(this));
+                }
+
+                _monsterBehavior = new BossMonsterBehavior(this, bossPattern, boss.PatternDelayTime);
+                _sliderFillColor.color = Color.red;
                 break;
         }
 
@@ -100,13 +125,6 @@ public class Monster : Character
         }
     }
 
-    public bool IsEnemyDetected()
-    {
-        Collider[] hits = Physics.OverlapSphere(transform.position, _detectionRange, _enemyMask);
-        return hits.Length > 0;
-    }
-
-
     public bool IsAskTamer()
     {
         float chance = Random.Range(0f, 1f);
@@ -131,23 +149,15 @@ public class Monster : Character
         AllyManager.Instance.AddMonsterAlly(this);
     }
 
-    public void EngageEnemy()
+    public void MoveTowardAndAttack()
     {
-        Character enemy = FindClosestEnemy();
+        if (!DetectedEnemy()) return;
 
-        if (enemy == null) return;
-
+        Character enemy = FindAttackTarget(DETECT_RANGE);
         Vector3 dir = enemy.transform.position - transform.position;
         dir.y = 0f;
 
         float dist = dir.magnitude;
-
-        if (dist > _attackRange)
-        {
-            // 적 방향으로 이동
-            dir.Normalize();
-            transform.position += dir * (_moveSpeed * Time.deltaTime);
-        }
 
         // 적 방향 회전
         if (dir.sqrMagnitude > 0.001f)
@@ -159,10 +169,24 @@ public class Monster : Character
             );
         }
 
-        // 사거리 안이면 공격
-        if (dist <= _attackRange)
+        if (dist > _attackRange) // 사거리 밖이면 이동
+        {
+            dir.Normalize();
+            
+            var newPosition = transform.position + dir * (_moveSpeed * Time.deltaTime);
+            if (CheckAvailableTile(newPosition))
+            {
+                transform.position = newPosition;
+            }
+        }
+        else // 사거리 안이면 공격
         {
             Attack(enemy);
         }
+    }
+
+    private bool CheckAvailableTile(Vector3 newPosition)
+    {
+        return MapManager.Instance.IsInGround(newPosition);
     }
 }

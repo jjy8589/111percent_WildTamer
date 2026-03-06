@@ -43,7 +43,7 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
         int gx = Mathf.FloorToInt(worldPos.x / MapConfig.TILE_SIZE);
         int gz = Mathf.FloorToInt(worldPos.z / MapConfig.TILE_SIZE);
         Vector3Int key = new Vector3Int(gx, 0, gz);
-        Debug.Log(key);
+
         if (!IsVisited(key))
         {
             _tileDictionary[key].IsVisited = true;
@@ -73,13 +73,13 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
         return _tileDictionary[keys[index]].WorldPos;
     }
 
-    public bool IsInGround(Vector2 place)
+    public bool IsInGround(Vector3 place)
     {
         foreach (var tile in _tileDictionary.Values)
         {
             Vector3 pos = tile.WorldPos;
 
-            if (place.x < pos.x + 0.5f && place.x > pos.x - 0.5f && place.y < pos.y + 0.5f && place.y > pos.y - 0.5f)
+            if (place.x < pos.x + 0.5f && place.x > pos.x - 0.5f && place.z < pos.z + 0.5f && place.z > pos.z - 0.5f)
                 return true;
         }
         return false;

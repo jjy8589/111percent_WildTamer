@@ -19,6 +19,10 @@ public class Player : Character
         _joyStick.OnEndDragJoystick += () => _isMoving = false;
 
         InitializeStat();
+
+        _heartSlider.maxValue = _maxHeart;
+        _heartSlider.value = _currentHeart;
+        _sliderFillColor.color = Color.blue;
     }
 
     private void Start()
@@ -31,8 +35,8 @@ public class Player : Character
         _maxHeart = 30f;
         _currentHeart = 30f;
         _moveSpeed = 5f;
-        _attackDamage = 0f;
-        _attackRange = 1f;
+        _attackDamage = 3f;
+        _attackRange = 3f;
         _attackSpeed = 1f;
     }
 
@@ -77,15 +81,8 @@ public class Player : Character
     {
         while (true)
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position, DETECT_RANGE, _enemyMask);
-            if (hits.Length == 0)
-            {
-                AllyManager.Instance.IsEnemyNear = false;
-            }
-            else
-            {
-                AllyManager.Instance.IsEnemyNear = true;
-            }
+            AllyManager.Instance.IsEnemyNear = DetectedEnemy();
+            Attack(FindAttackTarget(_attackRange));
 
             yield return new WaitForSeconds(0.3f);
         }

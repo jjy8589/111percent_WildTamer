@@ -9,15 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 331bbb7a897e828439281c6d64588d26, type: 3}
-  m_Name: Monster Horse
+  m_Script: {fileID: 11500000, guid: f6e27ce8d27b7a74a9f956e0d9b3ee44, type: 3}
+  m_Name: Boss1_Area
   m_EditorClassIdentifier: 
-  MonsterId: M_003
-  MonsterName: Horse
-  MaxHeart: 20
-  MoveSpeed: 1
-  AttackDamage: 2
-  AttackRange: 1.5
-  AttackSpeed: 1.5
-  DetectionRange: 5
-  TameChance: 0.3
+  Radius: 2
+  Damage: 3

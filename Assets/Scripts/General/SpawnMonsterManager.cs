@@ -29,7 +29,7 @@ public class SpawnMonsterManager : Singleton<SpawnMonsterManager>
         }
     }
 
-    private void SpawnMonsters(Vector3 pos, MonsterData monsterData)
+    public void SpawnMonsters(Vector3 pos, MonsterData monsterData)
     {
         Monster monster = ObjectPool.Instance.GetEnemyObject();
         monster.transform.position = pos + Vector3.up;
@@ -38,12 +38,12 @@ public class SpawnMonsterManager : Singleton<SpawnMonsterManager>
         monster.SetMonsterTeam(MonsterTeam.Enemy);
     }
 
-    private void SpawnAllys(Vector3 pos)
+    private void SpawnAllys(Vector3 pos, MonsterData monsterData)
     {
         Monster monster = ObjectPool.Instance.GetEnemyObject();
         monster.transform.position = pos + Vector3.up;
         monster.gameObject.SetActive(true);
-        monster.SetMonsterData(_monsterDatas[0]);
+        monster.SetMonsterData(monsterData);
         monster.SetMonsterTeam(MonsterTeam.Ally);
 
         AllyManager.Instance.AddMonsterAlly(monster);

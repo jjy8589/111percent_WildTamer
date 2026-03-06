@@ -43,7 +43,7 @@ public class EnemyAttackState : IMonsterState
         // 공격 로직
         Debug.Log("Enemy attacking player!");
 
-        _monster.EngageEnemy();
+        _monster.MoveTowardAndAttack();
     }
     public void Exit() { }
 }
@@ -133,7 +133,7 @@ public class AllyAttackState : IMonsterState
             _moveController.ChangeState(new AllyIdleState(_monster, _moveController));
         }
 
-        _monster.EngageEnemy();
+        _monster.MoveTowardAndAttack();
     }
     public void Exit() { }
 }

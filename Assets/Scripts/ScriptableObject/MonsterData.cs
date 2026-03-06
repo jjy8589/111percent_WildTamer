@@ -17,6 +17,9 @@ public class MonsterData : ScriptableObject
     public float AttackSpeed;
     public float DetectionRange;
 
+    [Header("Enemy Move Type")]
+    public EnemyMovePattern MovePattern;
+
     [Range(0f, 1f)]
     public float TameChance;
 }
