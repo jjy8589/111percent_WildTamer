@@ -11,43 +11,72 @@ public interface IBossPattern
     public bool IsFinished { get; }
 }
 
-public class AreaAttackPattern : IBossPattern
+public class BulletPattern : IBossPattern
 {
     private Monster _monster;
-    private float _radius;
-    private float _duration;
+
+    private int _minBulletCount;
+    private int _maxBulletCount;
+    private float _bulletSpeed; 
+    private float _range;
     private int _damage;
 
-    private float _timer;
+    private bool _isFinished;
 
-    public AreaAttackPattern(Monster monster, float radius, float duration, int damage)
+    public BulletPattern(Monster boss, int minBulletCount, int maxBulletCount, float bulletSpeed, float range, int damage)
     {
-        _monster = monster;
-        _radius = radius;
-        _duration = duration;
+        _monster = boss;
+        _minBulletCount = minBulletCount;
+        _maxBulletCount = maxBulletCount;
+        _bulletSpeed = bulletSpeed;
+        _range = range;
         _damage = damage;
     }
 
-    public bool IsFinished => _timer >= _duration;
+    public bool IsFinished => _isFinished;
 
     public void Enter()
     {
-        _timer = 0;
+        // 부채꼴로 발사하기
+        int bulletCount = ChooseBulletCount();
 
-        var attackArea = ObjectPool.Instance.GetCircleAttackAreaObject();
-        attackArea.Initialize(_radius, _duration, _damage, _monster.EnemyMask);
-        attackArea.transform.position = _monster.transform.position;
-        attackArea.gameObject.SetActive(true);
+        Vector3 targetDir = (GameManager.Instance.GetPlayerTransform().position - _monster.transform.position).normalized;
+        targetDir.y = 0; // 수평 발사 고정
+
+        Quaternion centerRotation = Quaternion.LookRotation(targetDir);
+
+        for (int i = 0; i < bulletCount; i++)
+        {
+            float randomAngle = Random.Range(-_range * 0.5f, _range * 0.5f);
+
+            // 중앙 회전값에 무작위 각도를 더함
+            Quaternion finalRotation = centerRotation * Quaternion.Euler(0, randomAngle, 0);
+
+            // 총알 생성 위치 (보스 가슴 높이)
+            Vector3 spawnPos = _monster.transform.position;
+
+            // 총알 생성
+            var bullet = ObjectPool.Instance.GetBulletObject();
+            bullet.transform.rotation = finalRotation;
+            bullet.transform.position = spawnPos;
+            bullet.Initialize(_bulletSpeed, _damage, _monster.EnemyMask);
+            bullet.gameObject.SetActive(true);
+        }
+        _isFinished = true;
     }
 
     public void Exit()
     {
-        _timer = 0;
+        _isFinished = false;
     }
 
     public void Update()
     {
-        _timer += Time.deltaTime;
+    }
+
+    private int ChooseBulletCount()
+    {
+        return Random.Range(_minBulletCount, _maxBulletCount + 1);
     }
 }
 
@@ -92,7 +121,7 @@ public class SummonPattern : IBossPattern
 
     public void Update()
     {
-        
+
     }
 
     private int ChooseSpawnCount()

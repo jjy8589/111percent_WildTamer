@@ -687,7 +687,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80b3c85d0073e114c9f4f1c161b65d1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -737,7 +737,6 @@ MonoBehaviour:
   _heartSlider: {fileID: 4708257162055053650}
   _sliderFillColor: {fileID: 6900756437245183968}
   _detectTrigger: {fileID: 6265378187828019502}
-  _askTamerObject: {fileID: 6265378187550454221}
   _askTamerButton: {fileID: 6265378187745694160}
   _monsterData: {fileID: 0}
 --- !u!114 &1841583424585350224
@@ -747,7 +746,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6265378188325609691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bc380e1845521e4c8f26bf40e410de1, type: 3}
   m_Name: 

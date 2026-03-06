@@ -7,13 +7,13 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
 {
     [Header("Objects Prefabs")]
     [SerializeField] private GameObject _monsterPrefab;
-    [SerializeField] private GameObject _circleAttackAreaPrefab;
+    [SerializeField] private GameObject _bulletPrefab;
 
     private const int _monsterSpawn = 128;
-    private const int _circleAttackAreaSpawn = 4;
+    private const int _bulletSpawn = 16;
 
     private Queue<Monster> _monsterQueue = new(_monsterSpawn);
-    private Queue<CircleAttackArea> _circleAttackAreaQueue = new(_circleAttackAreaSpawn);
+    private Queue<Bullet> _bulletQueue = new(_bulletSpawn);
 
     protected override void Awake()
     {
@@ -25,8 +25,8 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
         for (int i = 0; i < _monsterSpawn; i++)
             _monsterQueue.Enqueue(CreateNewMonster()); 
         
-        for (int i = 0; i < _circleAttackAreaSpawn; i++)
-            _circleAttackAreaQueue.Enqueue(CreateCircleAttackArea());
+        for (int i = 0; i < _bulletSpawn; i++)
+            _bulletQueue.Enqueue(CreateBullet());
     }
 
     private Monster CreateNewMonster()
@@ -37,9 +37,9 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
         return newObj;
     }
     
-    private CircleAttackArea CreateCircleAttackArea()
+    private Bullet CreateBullet()
     {
-        var newObj = Instantiate(_circleAttackAreaPrefab).GetComponent<CircleAttackArea>();
+        var newObj = Instantiate(_bulletPrefab).GetComponent<Bullet>();
         newObj.gameObject.SetActive(false);
         newObj.transform.SetParent(transform);
         return newObj;
@@ -61,17 +61,17 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
         }
     }
     
-    public CircleAttackArea GetCircleAttackAreaObject()
+    public Bullet GetBulletObject()
     {
-        if (Instance._circleAttackAreaQueue.Count > 0)
+        if (Instance._bulletQueue.Count > 0)
         {
-            var obj = _circleAttackAreaQueue.Dequeue();
+            var obj = _bulletQueue.Dequeue();
             obj.transform.SetParent(null);
             return obj;
         }
         else
         {
-            var newObj = CreateCircleAttackArea();
+            var newObj = CreateBullet();
             newObj.transform.SetParent(null);
             return newObj;
         }
@@ -83,9 +83,9 @@ public class ObjectPool : Singleton<ObjectPool>, IInitializableManager
         _monsterQueue.Enqueue(obj);
     }
     
-    public void ReturnObject(CircleAttackArea obj)
+    public void ReturnObject(Bullet obj)
     {
         obj.transform.SetParent(this.transform);
-        _circleAttackAreaQueue.Enqueue(obj);
+        _bulletQueue.Enqueue(obj);
     }
 }

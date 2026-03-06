@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6e27ce8d27b7a74a9f956e0d9b3ee44, type: 3}
-  m_Name: Boss1_Area
+  m_Name: Boss1_Bullet
   m_EditorClassIdentifier: 
-  Radius: 3
-  Duration: 2
+  MinBulletCount: 3
+  MaxBulletCount: 5
+  BulletSpeed: 3
+  Range: 60
   Damage: 3

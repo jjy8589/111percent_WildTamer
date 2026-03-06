@@ -45,4 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _monsterPrefab: {fileID: 6265378188325609691, guid: 3c4cd72d521ef16438f16ed33b54bc90, type: 3}
-  _circleAttackAreaPrefab: {fileID: 8588628899951825698, guid: d8bab6579f520e640a83f8a108be97bf, type: 3}
+  _bulletPrefab: {fileID: 2507836458803990817, guid: 6a9759b3abf5dec428364bf3d3d36639, type: 3}

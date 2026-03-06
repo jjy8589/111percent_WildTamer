@@ -7,9 +7,7 @@ using UnityEngine.UI;
 
 public class Monster : Character
 {
-    [SerializeField] private GameObject _askTamerObject;
     [SerializeField] private Button _askTamerButton;
-
 
     [SerializeField] private MonsterData _monsterData;
     private float _detectionRange;
@@ -115,7 +113,7 @@ public class Monster : Character
     {
         if (_monsterTeam.Equals(MonsterType.Enemy) && !AllyManager.Instance.IsMaxAlly() && IsAskTamer())
         {
-            _askTamerObject.SetActive(true);
+            _askTamerButton.gameObject.SetActive(true);
         }
         else
         {
@@ -142,7 +140,8 @@ public class Monster : Character
     public void SuccessTamer()
     {
         SetMonsterTeam(MonsterType.Ally);
-        _askTamerObject.SetActive(false);
+        _askTamerButton.gameObject.SetActive(false);
+        _heartSlider.gameObject.SetActive(true);
 
         _currentHeart = _maxHeart;
 
