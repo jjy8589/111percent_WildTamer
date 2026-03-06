@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &963500038921815686
+--- !u!1 &4639763378531349509
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 963500038921815688}
-  - component: {fileID: 963500038921815689}
+  - component: {fileID: 3078027356690484405}
+  - component: {fileID: 8810327746297989942}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: DataManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &963500038921815688
+--- !u!4 &3078027356690484405
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963500038921815686}
+  m_GameObject: {fileID: 4639763378531349509}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,22 +32,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &963500038921815689
+--- !u!114 &8810327746297989942
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963500038921815686}
+  m_GameObject: {fileID: 4639763378531349509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 007bba56bf5c0804e87b0e8478d300f7, type: 3}
+  m_Script: {fileID: 11500000, guid: f1517ecffd4627a4ea0bce3be38facf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _managerList:
-  - {fileID: 4639763378531349509, guid: edf57b7069cc6e144be604506a895500, type: 3}
-  - {fileID: 2330316204335929827, guid: 79eb8aecbd5b8cc44a26b2b696cbfd72, type: 3}
-  - {fileID: 3536110717729586796, guid: 54f3a466bc06cc046b3270dd08d7d6dc, type: 3}
-  - {fileID: 4678900825101734255, guid: 72f6b5d12d05c0146b300424914396ee, type: 3}
-  - {fileID: 7835938691991521077, guid: 4e23539931539dd46a162f3e3e14883c, type: 3}
-  _player: {fileID: 0}

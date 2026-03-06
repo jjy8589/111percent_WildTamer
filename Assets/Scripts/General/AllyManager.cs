@@ -41,4 +41,12 @@ public class AllyManager : Singleton<AllyManager>
             _monsterAllyList[i].Target = (i == 0) ? GameManager.Instance.GetPlayerTransform() : _monsterAllyList[i - 1].transform;
         }
     }
+
+    //public List<string> GetAllyMonsterID()
+    //{
+    //    foreach(var value in _monsterAllyList)
+    //    {
+    //        value.id
+    //    }
+    //}
 }
