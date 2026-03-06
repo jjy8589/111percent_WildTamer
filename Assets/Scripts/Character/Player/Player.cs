@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : Character
 {
-    private Vector3 _inputDirection;
+    //private Vector3 _inputDirection;
     private bool _isMoving;
 
     [SerializeField] private DynamicJoystick _joyStick;
@@ -15,7 +15,7 @@ public class Player : Character
     {
         base.Awake();
 
-        _joyStick.OnDragJoystick += OnDirectionChanged;
+        _joyStick.OnStartDragJoystick += () => _isMoving = true;
         _joyStick.OnEndDragJoystick += () => _isMoving = false;
 
         InitializeStat();
@@ -23,6 +23,21 @@ public class Player : Character
         _heartSlider.maxValue = _maxHeart;
         _heartSlider.value = _currentHeart;
         _sliderFillColor.color = Color.blue;
+    }
+
+    private void Update()
+    {
+        MovePlayer();
+    }
+
+    private void MovePlayer()
+    {
+        // 조이스틱에서 방향 데이터 가져오기
+        Vector3 direction = _joyStick.GetMoveDirection();
+
+        // 이동 및 회전
+        transform.position += direction * _moveSpeed * Time.deltaTime;
+        transform.rotation = Quaternion.LookRotation(direction);
     }
 
     private void Start()
@@ -39,38 +54,6 @@ public class Player : Character
         _attackRange = 3f;
         _attackSpeed = 1f;
     }
-
-    /// 조이스틱 입력 처리
-    void OnDirectionChanged(Vector3 direction)
-    {
-        _inputDirection = direction;
-        MovePlayer();
-    }
-
-    /// 플레이어 이동
-    void MovePlayer()
-    {
-        Vector3 newPosition = transform.position + _inputDirection * Time.deltaTime * _moveSpeed;
-
-        transform.position = newPosition;
-        transform.rotation = Quaternion.LookRotation(_inputDirection);
-
-        _isMoving = true;
-    }
-
-    //private Vector2 moveInput; 
-    //void Update()
-    //{
-    //    // 조이스틱 또는 키보드 입력 (모바일이면 조이스틱 컴포넌트로 교체)
-    //    moveInput = new Vector2(Input.GetAxisRaw("Horizontal"),
-    //                            Input.GetAxisRaw("Vertical")).normalized;
-    //}
-
-    //void FixedUpdate()
-    //{
-    //    var rb = GetComponent<Rigidbody>();
-    //    rb.MovePosition(rb.position + (Vector3)moveInput * _moveSpeed * Time.fixedDeltaTime);
-    //}
 
     protected override void Die()
     {

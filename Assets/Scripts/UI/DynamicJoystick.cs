@@ -2,14 +2,20 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DynamicJoystick : MonoBehaviour, IDragHandler, IEndDragHandler
+public class DynamicJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private RectTransform _joystickBackground;
     [SerializeField] private RectTransform _joystickHandle;
     private Vector2 _inputVector;
 
-    public Action<Vector3> OnDragJoystick;
+    public Action OnStartDragJoystick;
     public Action OnEndDragJoystick;
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        OnStartDragJoystick?.Invoke();
+    }
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -26,18 +32,21 @@ public class DynamicJoystick : MonoBehaviour, IDragHandler, IEndDragHandler
             // 핸들 이동
             _joystickHandle.anchoredPosition = new Vector2(_inputVector.x * (_joystickBackground.sizeDelta.x / 2), _inputVector.y * (_joystickBackground.sizeDelta.y / 2));
         }
-
-        OnDragJoystick?.Invoke(GetMoveDirection());
     }
 
     public Vector3 GetMoveDirection()
     {
         // 쿼터뷰 시점(45도 회전)에 맞게 입력 방향 변환
-        return new Vector3(_inputVector.x, 0, _inputVector.y);
+        return new Vector3(_inputVector.x, 0, _inputVector.y).normalized;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // 드래그 종료 시 초기화
+        _inputVector = Vector2.zero;
+        _joystickHandle.anchoredPosition = Vector2.zero;
+
         OnEndDragJoystick?.Invoke();
     }
+
 }
