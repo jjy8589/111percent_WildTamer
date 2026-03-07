@@ -21,7 +21,6 @@ public abstract class Character : MonoBehaviour
 
     protected float _lastAttackTime;
 
-    protected const float DETECT_RANGE = 5f;
     [SerializeField] protected Collider _detectTrigger;
 
     public float MoveSpeed => _moveSpeed;
@@ -55,7 +54,7 @@ public abstract class Character : MonoBehaviour
 
     public bool DetectedEnemy()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, DETECT_RANGE, _enemyMask);
+        Collider[] hits = Physics.OverlapSphere(transform.position, GameConfig.DETECT_RANGE, _enemyMask);
         
         if (hits.Length == 0) return false;
         return true;

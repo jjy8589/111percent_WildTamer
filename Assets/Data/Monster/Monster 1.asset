@@ -21,4 +21,4 @@ MonoBehaviour:
   AttackSpeed: 1
   DetectionRange: 5
   MovePattern: 0
-  TameChance: 1
+  TameChance: 0.3

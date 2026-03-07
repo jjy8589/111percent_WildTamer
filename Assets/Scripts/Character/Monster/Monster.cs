@@ -14,7 +14,6 @@ public class Monster : Character
 
     private MonsterType _monsterTeam;
     private IMonsterBehavior _monsterBehavior;
-    private MonsterMoveController _moveController;
 
     private Transform _target;
 
@@ -26,7 +25,6 @@ public class Monster : Character
         base.Awake();
 
         _askTamerButton.onClick.AddListener(SuccessTamer);
-        _moveController = GetComponent<MonsterMoveController>();
     }
 
     private void LateUpdate()
@@ -157,7 +155,7 @@ public class Monster : Character
     {
         if (!DetectedEnemy()) return;
 
-        Character enemy = FindAttackTarget(DETECT_RANGE);
+        Character enemy = FindAttackTarget(GameConfig.DETECT_RANGE);
         Vector3 dir = enemy.transform.position - transform.position;
         dir.y = 0f;
 
