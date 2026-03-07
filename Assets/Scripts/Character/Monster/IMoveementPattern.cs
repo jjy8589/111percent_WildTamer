@@ -5,7 +5,6 @@ using UnityEngine;
 public interface IMovementPattern
 {
     public void Move();
-    //public void Move(MonsterMoveController monster);
 }
 
 public class RandomWalkPattern : IMovementPattern
@@ -127,9 +126,8 @@ public class CircularMovePattern : IMovementPattern
 
         Vector3 randomDir = Random.insideUnitSphere;
         randomDir.y = 0;
-        randomDir.Normalize();
 
-        _center = _monster.transform.position + randomDir * _radius;
+        _center = _monster.transform.position + randomDir.normalized * _radius;
     }
 
     public void Move()

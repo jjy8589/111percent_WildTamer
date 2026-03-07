@@ -49,6 +49,8 @@ public class DataManager : Singleton<DataManager>, IInitializableManager
         JsonLoad();
     }
 
+    #region 도감 관련
+
     public List<string> GetSavedAllyList()
     {
         return _saveData.AllyList;
@@ -92,7 +94,9 @@ public class DataManager : Singleton<DataManager>, IInitializableManager
             JsonSave();
         }
     }
+    #endregion
 
+    #region 맵 관련
     public List<VistVector> GetVisitedMaps()
     {
         return _saveData.VisitedMaps;
@@ -109,7 +113,9 @@ public class DataManager : Singleton<DataManager>, IInitializableManager
         _saveData.VisitedMaps.Add(new VistVector(key.x, key.z));
         JsonSave();
     }
+    #endregion
 
+    #region 아군 몬스터 관련
     public void UpdateAllyList(List<string> allyList)
     {
         _saveData.AllyList = allyList;
@@ -121,6 +127,7 @@ public class DataManager : Singleton<DataManager>, IInitializableManager
 
         JsonSave();
     }
+#endregion
 
     public void JsonLoad()
     {

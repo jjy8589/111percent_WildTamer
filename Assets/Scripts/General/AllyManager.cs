@@ -10,9 +10,11 @@ public class AllyManager : Singleton<AllyManager>
 
     public bool IsEnemyNear = false;
 
-    private void Start()
+    public List<Monster> MonsterAllyList => _monsterAllyList;
+
+    private void Update()
     {
-        UpdateTarget();
+        UpdateBoid();
     }
 
     public bool IsMaxAlly()
@@ -25,7 +27,6 @@ public class AllyManager : Singleton<AllyManager>
         if (IsMaxAlly()) return;
 
         _monsterAllyList.Add(monster);
-        UpdateTarget();
 
         DataManager.Instance.UpdateAllyList(GetAllyMonsterID());
     }
@@ -33,16 +34,18 @@ public class AllyManager : Singleton<AllyManager>
     public void RemoveMonsterAlly(Monster monster)
     {
         _monsterAllyList.Remove(monster);
-        UpdateTarget();
 
         DataManager.Instance.UpdateAllyList(GetAllyMonsterID());
     }
 
-    private void UpdateTarget()
+    private void UpdateBoid()
     {
-        for(int i = 0; i < _monsterAllyList.Count; i++)
+        for (int i = 0; i < _monsterAllyList.Count; i++)
         {
-            _monsterAllyList[i].Target = (i == 0) ? GameManager.Instance.GetPlayerTransform() : _monsterAllyList[i - 1].transform;
+            Monster monster = _monsterAllyList[i];
+            Vector3 boid = AIMoveCalculator.CalcBoid(monster, _monsterAllyList);
+
+            monster.BoidForce = boid;
         }
     }
 

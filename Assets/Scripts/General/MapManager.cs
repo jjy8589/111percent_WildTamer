@@ -88,13 +88,10 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
 
     public bool IsInGround(Vector3 place)
     {
-        foreach (var tile in _tileDictionary.Values)
-        {
-            Vector3 pos = tile.WorldPos;
+        int gx = Mathf.FloorToInt(place.x / MapConfig.TILE_SIZE);
+        int gz = Mathf.FloorToInt(place.z / MapConfig.TILE_SIZE);
+        Vector3Int key = new Vector3Int(gx, 0, gz);
 
-            if (place.x < pos.x + 1f && place.x > pos.x - 1f && place.z < pos.z + 1f && place.z > pos.z - 1f)
-                return true;
-        }
-        return false;
+        return _tileDictionary.TryGetValue(key, out _)/* && tile.IsWalkable*/;
     }
 }

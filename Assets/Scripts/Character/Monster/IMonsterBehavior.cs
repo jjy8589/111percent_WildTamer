@@ -35,16 +35,24 @@ public class AllyMonsterBehavior : IMonsterBehavior
         }
         else
         {
-            FollowPlayer();
+            FollowTarget();
         }
     }
 
-    private void FollowPlayer()
+    private void FollowTarget()
     {
         if (!GameManager.Instance.IsPlayerMoving()) return;
 
-        Vector3 desiredPos = _monster.Target.position - _monster.Target.right * 1.5f;
-        _monster.transform.position = Vector3.Lerp(_monster.transform.position, desiredPos, Time.deltaTime);
+        Vector3 toTarget = GameManager.Instance.GetPlayerTransform().position - _monster.transform.position;
+        toTarget.y = 0f;
+
+        Vector3 moveDir = (toTarget.normalized + _monster.BoidForce).normalized;
+
+        Vector3 newPos = _monster.transform.position
+                        + moveDir * (_monster.MoveSpeed * Time.deltaTime);
+
+        if (MapManager.Instance.IsInGround(newPos))
+            _monster.transform.position = newPos;
     }
 }
 
@@ -77,7 +85,7 @@ public class EnemyMonsterBehavior : IMonsterBehavior
 
         else
         {
-            // TODO : 본인의 자리로 돌아가는 코드 넣기
+            // TODO : 필요하다면 본인의 자리로 돌아가는 코드 넣기
             _movePattern?.Move();
         }
     }

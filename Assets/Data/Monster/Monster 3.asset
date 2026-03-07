@@ -19,6 +19,5 @@ MonoBehaviour:
   AttackDamage: 5
   AttackRange: 5
   AttackSpeed: 0.5
-  DetectionRange: 3
   MovePattern: 3
   TameChance: 0.3

@@ -20,3 +20,11 @@ public static class PlayerConfig
     public const float ATTACK_RANGE = 3f;
     public const float ATTACK_SPEED = 1f;
 }
+
+public static class BoidConfig
+{
+    public const float SEPARATION_RADIUS = 1.5f;
+    public const float SEPARATION_WEIGHT = 1.5f;
+    public const float ALIGNMENT_WEIGHT = 0.5f;
+    public const float COHESION_WEIGHT = 0.3f;
+}

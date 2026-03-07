@@ -10,15 +10,14 @@ public class Monster : Character
     [SerializeField] private Button _askTamerButton;
 
     [SerializeField] private MonsterData _monsterData;
-    private float _detectionRange;
 
     private MonsterType _monsterTeam;
     private IMonsterBehavior _monsterBehavior;
 
-    private Transform _target;
+    private Vector3 _boidForce;
 
-    public Transform Target { get => _target; set => _target = value; }
     public string MonsterId => _monsterData.MonsterId;
+    public Vector3 BoidForce { get => _boidForce; set => _boidForce = value; }
 
     protected override void Awake()
     {
@@ -53,7 +52,6 @@ public class Monster : Character
         _attackDamage = _monsterData.AttackDamage;
         _attackRange = _monsterData.AttackRange;
         _attackSpeed = _monsterData.AttackSpeed;
-        _detectionRange = _monsterData.DetectionRange;
     }
 
     public void SetMonsterTeam(MonsterType team)
@@ -173,9 +171,7 @@ public class Monster : Character
 
         if (dist > _attackRange) // 사거리 밖이면 이동
         {
-            dir.Normalize();
-            
-            var newPosition = transform.position + dir * (_moveSpeed * Time.deltaTime);
+            var newPosition = transform.position + dir.normalized * (_moveSpeed * Time.deltaTime);
             if (CheckAvailableTile(newPosition))
             {
                 transform.position = newPosition;

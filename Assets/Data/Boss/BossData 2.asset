@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a04d4d84dea087848a82433d07112fe0, type: 3}
   m_Name: BossData 2
   m_EditorClassIdentifier: 
-  MonsterId: B_001
-  MonsterName: Boss 1
+  MonsterId: B_002
+  MonsterName: Boss 2
   MaxHeart: 50
   MoveSpeed: 0
   AttackDamage: 0
   AttackRange: 0
   AttackSpeed: 0
-  DetectionRange: 3
   MovePattern: 0
   TameChance: 0
   PatternDelayTime: 5
