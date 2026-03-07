@@ -13,7 +13,7 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
 {
     private Dictionary<Vector3Int, TileData> _tileDictionary = new();
 
-    public Action<Vector3> OnCellVisited;
+    public Action<Vector3Int> OnCellVisited;
 
     public void Initialize()
     {
@@ -29,6 +29,21 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
                     WorldPos = worldPos,
                     IsVisited = false
                 };
+            }
+        }
+
+        LoadVisited();
+    }
+
+    public void LoadVisited()
+    {
+        foreach (var visit in DataManager.Instance.GetVisitedMaps())
+        {
+            Vector3Int key = new Vector3Int(visit.X, 0, visit.Z);
+
+            if (_tileDictionary.ContainsKey(key))
+            {
+                _tileDictionary[key].IsVisited = true;
             }
         }
     }
@@ -48,7 +63,8 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
         {
             _tileDictionary[key].IsVisited = true;
 
-            OnCellVisited?.Invoke(worldPos);
+            DataManager.Instance.VisitMap(key);
+            OnCellVisited?.Invoke(key);
         }
     }
 
@@ -57,14 +73,11 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
         return new List<TileData>(_tileDictionary.Values);
     }
 
-    private bool IsVisited(Vector3 worldPos)
+    private bool IsVisited(Vector3Int key)
     {
-        int gx = Mathf.FloorToInt(worldPos.x / MapConfig.TILE_SIZE);
-        int gz = Mathf.FloorToInt(worldPos.z / MapConfig.TILE_SIZE);
-        Vector3Int key = new Vector3Int(gx, 0, gz);
-
         return _tileDictionary.ContainsKey(key) && _tileDictionary[key].IsVisited;
     }
+
     public Vector3 GetRandomPosition()
     {
         var keys = new List<Vector3Int>(_tileDictionary.Keys);
@@ -79,18 +92,9 @@ public class MapManager : Singleton<MapManager>, IInitializableManager
         {
             Vector3 pos = tile.WorldPos;
 
-            if (place.x < pos.x + 0.5f && place.x > pos.x - 0.5f && place.z < pos.z + 0.5f && place.z > pos.z - 0.5f)
+            if (place.x < pos.x + 1f && place.x > pos.x - 1f && place.z < pos.z + 1f && place.z > pos.z - 1f)
                 return true;
         }
         return false;
     }
-
-    public void AddBlankTile()
-    {
-    }
-
-    public void RemoveBlankTile()
-    {
-    }
-
 }

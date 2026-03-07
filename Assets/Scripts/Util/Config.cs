@@ -1,3 +1,8 @@
+public static class GameConfig
+{
+    public const float DETECT_RANGE = 5f;
+}
+
 public static class MapConfig
 {
     public const int GRID_SIZE_X = 100;
@@ -5,4 +10,13 @@ public static class MapConfig
     public const float TILE_SIZE = 1f;
 
     public const float FOG_REVEAL_RANGE = 5f;
+}
+
+public static class PlayerConfig
+{
+    public const float MAX_HEART = 300f;
+    public const float MOVE_SPEED = 5f;
+    public const float ATTACK_DAMAGE = 3f;
+    public const float ATTACK_RANGE = 3f;
+    public const float ATTACK_SPEED = 1f;
 }

@@ -17,7 +17,7 @@ public class SpawnMonsterManager : Singleton<SpawnMonsterManager>
 
     private void Start()
     {
-        for(int i = 0; i < 0; i++)
+        for(int i = 0; i < 10; i++)
         {
             int index = UnityEngine.Random.Range(0, _monsterDatas.Count);
             SpawnMonster(MapManager.Instance.GetRandomPosition(), _monsterDatas[index]);
@@ -26,6 +26,26 @@ public class SpawnMonsterManager : Singleton<SpawnMonsterManager>
         for(int i = 0; i < _bossMonsterSpawner.Count; i++)
         {
             SpawnBoss(_bossMonsterSpawner[i].SpawnPosition, _bossMonsterSpawner[i].BossData);
+        }
+
+        SpawnSavedAllies();
+    }
+
+    private void SpawnSavedAllies()
+    {
+        List<string> allyIds = DataManager.Instance.GetSavedAllyList();
+
+        foreach (var id in allyIds)
+        {
+            MonsterData data = DataManager.Instance.GetMonsterData(id);
+
+            if (data != null)
+            {
+                Vector3 offset = UnityEngine.Random.insideUnitSphere * 2f;
+                Vector3 spawnPos = GameManager.Instance.GetPlayerTransform().position + offset;
+                
+                SpawnAlly(spawnPos, data);
+            }
         }
     }
 

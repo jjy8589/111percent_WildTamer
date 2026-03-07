@@ -10,4 +10,13 @@ public class CollectionData
 
     public bool IsFound; // 마주친 적 있는지
     public bool HasBeenAlly; // 동료가 된 적 있는지
+
+    public CollectionData(string id, string name, float heart, bool isFound, bool hasBeenAlly)
+    {
+        MonsterID = id;
+        MonsterName = name;
+        MaxHeart = heart;
+        IsFound = isFound;
+        HasBeenAlly = hasBeenAlly;
+    }
 }

@@ -19,6 +19,7 @@ public class Monster : Character
     private Transform _target;
 
     public Transform Target { get => _target; set => _target = value; }
+    public string MonsterId => _monsterData.MonsterId;
 
     protected override void Awake()
     {
@@ -30,7 +31,10 @@ public class Monster : Character
 
     private void LateUpdate()
     {
-        _monsterBehavior?.Update();
+        if(IsAlive)
+        {
+            _monsterBehavior?.Update();
+        }
     }
 
     public void SetMonsterData(MonsterData monsterData)
@@ -141,9 +145,10 @@ public class Monster : Character
     {
         SetMonsterTeam(MonsterType.Ally);
         _askTamerButton.gameObject.SetActive(false);
-        _heartSlider.gameObject.SetActive(true);
 
         _currentHeart = _maxHeart;
+        _heartSlider.value = _currentHeart;
+        _heartSlider.gameObject.SetActive(true);
 
         AllyManager.Instance.AddMonsterAlly(this);
     }

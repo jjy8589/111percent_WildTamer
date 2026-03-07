@@ -15,7 +15,7 @@ public class FogOfWarGrid : MonoBehaviour
     void Start()
     {
         InitFogTexture();
-        MapManager.Instance.OnCellVisited += RevealAroundPlayer;
+        MapManager.Instance.OnCellVisited += RevealTile;
     }
 
     private void InitFogTexture()
@@ -25,16 +25,28 @@ public class FogOfWarGrid : MonoBehaviour
 
         // 전부 검정(미탐색)으로 초기화
         for (int i = 0; i < _fogPixels.Length; i++)
+        {
             _fogPixels[i] = new Color(0, 0, 0, 1f);
+        }
+        foreach(var visitTile in DataManager.Instance.GetVisitedMaps())
+        {
+            RevealTile(new Vector3Int(visitTile.X, 0, visitTile.Z));
+        }
 
         _fogTexture.SetPixels(_fogPixels);
         _fogTexture.Apply();
         _fogRenderer.material.mainTexture = _fogTexture;
     }
 
+    void RevealTile(Vector3Int key)
+    {
+        Vector3 worldPos = new Vector3(key.x * MapConfig.TILE_SIZE, 0, key.z * MapConfig.TILE_SIZE);
+
+        RevealAroundPlayer(worldPos);
+    }
+
     void RevealAroundPlayer(Vector3 pos)
     {
-        // 월드 좌표 → 텍스처 픽셀 좌표 변환
         int px = WorldToPixelX(pos.x);
         int py = WorldToPixelY(pos.z);
         int pixelRadius = (int)(MapConfig.FOG_REVEAL_RANGE / MapConfig.GRID_SIZE_X * _textureWidth);
@@ -50,9 +62,8 @@ public class FogOfWarGrid : MonoBehaviour
                 int idx = y * _textureWidth + x;
                 if (_fogPixels[idx].a > 0.01f)
                 {
-                    // 경계부 부드럽게: 거리에 따라 알파 감소
                     float dist = Mathf.Sqrt((x - px) * (x - px) + (y - py) * (y - py));
-                    float alpha = Mathf.Lerp(0f, 0.4f, dist / pixelRadius); // 외곽은 옅은 안개
+                    float alpha = Mathf.Lerp(0f, 0.4f, dist / pixelRadius);
                     _fogPixels[idx] = new Color(0, 0, 0, alpha);
                     changed = true;
                 }
@@ -65,6 +76,7 @@ public class FogOfWarGrid : MonoBehaviour
             _fogTexture.Apply();
         }
     }
+
 
     int WorldToPixelX(float wx)
     {

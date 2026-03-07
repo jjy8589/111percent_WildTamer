@@ -27,13 +27,19 @@ public class Player : Character
 
     private void Update()
     {
-        MovePlayer();
+        if (IsAlive)
+        {
+            MovePlayer();
+        }
     }
 
     private void MovePlayer()
     {
         // 조이스틱에서 방향 데이터 가져오기
         Vector3 direction = _joyStick.GetMoveDirection();
+
+        if (direction.magnitude <= 0.01f)
+            return;
 
         // 이동 및 회전
         transform.position += direction * _moveSpeed * Time.deltaTime;
@@ -47,12 +53,12 @@ public class Player : Character
 
     private void InitializeStat()
     {
-        _maxHeart = 30f;
-        _currentHeart = 30f;
-        _moveSpeed = 5f;
-        _attackDamage = 3f;
-        _attackRange = 3f;
-        _attackSpeed = 1f;
+        _maxHeart = PlayerConfig.MAX_HEART;
+        _currentHeart = PlayerConfig.MAX_HEART;
+        _moveSpeed = PlayerConfig.MOVE_SPEED;
+        _attackDamage = PlayerConfig.ATTACK_DAMAGE;
+        _attackRange = PlayerConfig.ATTACK_RANGE;
+        _attackSpeed = PlayerConfig.ATTACK_SPEED;
     }
 
     protected override void Die()
@@ -76,5 +82,15 @@ public class Player : Character
         gameObject.layer = LayerMask.NameToLayer("Ally");
         _allyMask = LayerMask.GetMask("Ally");
         _enemyMask = LayerMask.GetMask("Enemy");
+    }
+
+    public override void Attack(Character target)
+    {
+        base.Attack(target);
+
+        if(target is Monster monster)
+        {
+            DataManager.Instance.SetMonsterFound(monster.MonsterId);
+        }
     }
 }

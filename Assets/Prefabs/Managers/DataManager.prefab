@@ -44,3 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1517ecffd4627a4ea0bce3be38facf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _monsterDataList:
+  - {fileID: 11400000, guid: 6f1cf664428a19748902d90dcb36eb9e, type: 2}
+  - {fileID: 11400000, guid: f598766161c75a84b8614f80013afb32, type: 2}
+  - {fileID: 11400000, guid: e1b2b2784fedf7e459ebaa99fe7d026f, type: 2}
+  - {fileID: 11400000, guid: b201f4458fe3ff442bf6c96ada90b3c7, type: 2}
+  - {fileID: 11400000, guid: f66be37c427c58f4fbaf83785b069d19, type: 2}

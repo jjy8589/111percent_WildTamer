@@ -228,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5081371083869271570
 RectTransform:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -646,6 +646,7 @@ GameObject:
   - component: {fileID: 7296239792906769610}
   - component: {fileID: 7296239792906769612}
   - component: {fileID: 7296239792906769611}
+  - component: {fileID: 3268689424141358738}
   m_Layer: 5
   m_Name: CollectionItem
   m_TagString: Untagged
@@ -715,3 +716,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3268689424141358738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7296239792906769609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8d6235a4d373243af4f265af1a4534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isAllyObject: {fileID: 6162709498214412169}
+  _nameText: {fileID: 6132488126481474349}
+  _heartText: {fileID: 2569906583876327557}
+  _unlockObject: {fileID: 5482900365516221314}

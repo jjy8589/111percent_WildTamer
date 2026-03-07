@@ -26,12 +26,16 @@ public class AllyManager : Singleton<AllyManager>
 
         _monsterAllyList.Add(monster);
         UpdateTarget();
+
+        DataManager.Instance.UpdateAllyList(GetAllyMonsterID());
     }
 
     public void RemoveMonsterAlly(Monster monster)
     {
         _monsterAllyList.Remove(monster);
         UpdateTarget();
+
+        DataManager.Instance.UpdateAllyList(GetAllyMonsterID());
     }
 
     private void UpdateTarget()
@@ -42,11 +46,15 @@ public class AllyManager : Singleton<AllyManager>
         }
     }
 
-    //public List<string> GetAllyMonsterID()
-    //{
-    //    foreach(var value in _monsterAllyList)
-    //    {
-    //        value.id
-    //    }
-    //}
+    public List<string> GetAllyMonsterID()
+    {
+        List<string> idList = new();
+
+        foreach (var value in _monsterAllyList)
+        {
+            idList.Add(value.MonsterId);
+        }
+
+        return idList;
+    }
 }

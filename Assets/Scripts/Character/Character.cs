@@ -51,6 +51,8 @@ public abstract class Character : MonoBehaviour
 
     protected abstract void Die();
 
+    protected bool IsAlive => _currentHeart > 0;
+
     public bool DetectedEnemy()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, DETECT_RANGE, _enemyMask);
@@ -93,7 +95,7 @@ public abstract class Character : MonoBehaviour
 
     public bool CanAttack() => Time.time >= _lastAttackTime + _attackSpeed;
 
-    public void Attack(Character target)
+    public virtual void Attack(Character target)
     {
         if (!CanAttack()) return;
         if (target == null) return;
