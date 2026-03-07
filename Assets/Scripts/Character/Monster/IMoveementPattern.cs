@@ -141,17 +141,17 @@ public class CircularMovePattern : IMovementPattern
         float z = Mathf.Sin(_angle) * _radius;
 
         Vector3 newPos = _center + new Vector3(x, 0, z);
-        _monster.transform.position = newPos;
+        Vector3 moveDir = newPos - _monster.transform.position;
+        _monster.transform.position += moveDir.normalized * (_monster.MoveSpeed * Time.deltaTime);
 
-        // 이동 방향으로 회전
-        Vector3 dir = newPos - _monster.transform.position;
-        if (dir.sqrMagnitude > 0.001f)
+        if (moveDir.sqrMagnitude > 0.001f)
         {
             _monster.transform.rotation = Quaternion.Slerp(
                 _monster.transform.rotation,
-                Quaternion.LookRotation(dir),
+                Quaternion.LookRotation(moveDir),
                 Time.deltaTime * 5f
             );
         }
+
     }
 }
